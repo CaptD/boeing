@@ -1,0 +1,19 @@
+<?xml version="1.0"?>
+<launch>
+  <!-- We resume the logic in empty_world.launch, changing only the name of the world to be launched -->
+  <include file="$(find gazebo_ros)/launch/empty_world.launch">
+    <arg name="world_name" value="$(find coverage)/worlds/wingbay.world"/> <!-- Note: the world_name is with respect to GAZEBO_RESOURCE_PATH environmental variable -->
+    <arg name="paused" value="true"/>
+    <arg name="use_sim_time" value="true"/>
+    <arg name="gui" value="true"/>
+    <arg name="headless" value="false"/>
+    <arg name="debug" value="false"/>
+  </include>
+  <node name="spawn_model" pkg="gazebo_ros" type="spawn_model"
+    args="-file $(find coverage)/robots/crawler.urdf -urdf -x 1 -y 0 -z 0.2 -Y 3.14159265 -J Arm_yaw_joint 3.14159265 -model crawler"
+    output="screen" />
+  <param name="robot_description" command="cat $(find coverage)/robots/crawler.urdf" />
+  <node name="joint_state_publisher" pkg="joint_state_publisher" type="joint_state_publisher" />
+  <node name="robot_state_publisher" pkg="robot_state_publisher" type="state_publisher" />
+
+</launch>
